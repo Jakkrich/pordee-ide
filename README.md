@@ -35,6 +35,8 @@ claude plugin install pordee@pordee
 | `/pordee lite` | โหมดเบา — ตัดคำสุภาพและ filler ออก แต่ grammar เต็ม |
 | `/pordee full` | โหมดเต็ม — ตัดให้สั้นที่สุด |
 | `/pordee stop` | ปิด |
+| `/pordee-stats` | ดูสถิติ token ของ session ปัจจุบัน |
+| `/pordee-stats --share` | สรุปสถิติ 1 บรรทัด (copy-paste ได้) |
 
 ### Keyword (ไม่ต้องพิมพ์ slash)
 
@@ -220,6 +222,51 @@ Pattern: `[ของ] [ทำ] [เหตุผล]. [ขั้นต่อ].`
    - update state ถ้าเจอ trigger
    - ฉีด reminder ของ level ปัจจุบันเข้า context (กันไม่ให้ model drift)
 5. State อยู่ที่ `~/.pordee/state.json` — ถาวรข้าม session
+
+---
+
+## สถิติ (Stats)
+
+`/pordee-stats` แสดง token usage ของ session ปัจจุบัน + ประมาณการ token ที่ประหยัดได้จากการใช้ pordee
+
+```
+พอดี Stats
+──────────────────────────────────
+Session:  ...projects/demo/session.jsonl
+Turns:    12
+──────────────────────────────────
+Output tokens:         8,450
+Cache-read tokens:     2,100
+──────────────────────────────────
+Est. without pordee:   21,667
+Est. tokens saved:     13,217 (~61%)
+Est. saved (USD):      ~$0.198
+Savings est. from benchmarks/ (median per-task). Actual varies by task.
+```
+
+| คำสั่ง | ผล |
+|---|---|
+| `/pordee-stats` | สถิติ session ปัจจุบัน + lifetime summary |
+| `/pordee-stats --share` | สรุป 1 บรรทัด — เช่น `⚡ Saved 13,217 output tokens (~$0.198) across 12 turns this session — pordee` |
+| `/pordee-stats --all` | สถิติรวมทุก session (lifetime) |
+| `/pordee-stats --since 7d` | สถิติย้อนหลัง 7 วัน |
+
+### Benchmark
+
+compression ratio ที่ stats ใช้มาจาก `benchmarks/compression.json` — สร้างจากการรัน prompt ชุดทดสอบภาษาไทย 8 ข้อ ผ่าน API แบบปกติ vs pordee แล้วคิด median
+
+```bash
+# รัน benchmark (ต้องมี ANTHROPIC_API_KEY)
+export ANTHROPIC_BASE_URL=https://api.kimi.com/coding/v1
+node benchmarks/run.js --level full
+node benchmarks/run.js --level lite
+```
+
+หรือใช้ `--dry-run` สร้าง mock data สำหรับทดสอบ:
+
+```bash
+node benchmarks/run.js --dry-run --level full
+```
 
 ---
 

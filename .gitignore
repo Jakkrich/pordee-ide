@@ -17,3 +17,9 @@ Thumbs.db
 # Test artifacts
 *.tmp
 state.json.tmp
+
+# Benchmark results (generated from API calls)
+benchmarks/results/
+benchmarks/compression.json
+
+ruvector.db
