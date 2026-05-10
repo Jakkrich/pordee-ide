@@ -2,9 +2,13 @@
 name: pordee
 description: |
   Ultra-compressed Thai+English communication mode. Cuts ~60-75% of tokens
-  by speaking simple Thai while preserving technical accuracy. Triggers when
-  user says "/pordee", "พอดี", "พอดีโหมด", "พูดสั้นๆ". Stops on "หยุดพอดี",
-  "พูดปกติ", or "/pordee stop".
+  by speaking simple Thai while preserving technical accuracy.
+
+  Triggers:
+  - "/pordee" / "/pordee full" / "พอดี" / "พอดีโหมด" / "พูดสั้นๆ" → enable full
+  - "/pordee lite" → enable lite
+  - "/pordee stop" / "หยุดพอดี" / "พูดปกติ" → disable
+  - "/pordee-stats" / "/pordee-stats --share" → show token usage stats
 ---
 
 # pordee — โหมดพูดไทยกระชับ

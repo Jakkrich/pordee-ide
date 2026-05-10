@@ -7,6 +7,7 @@
 
 const { getState, setState, logError } = require('./pordee-config');
 const { execFileSync } = require('child_process');
+const path = require('path');
 
 function stripCodeFences(text) {
   // Remove triple-backtick fenced blocks (multi-line and inline ```...```).
@@ -18,18 +19,20 @@ function parseTrigger(prompt) {
   const trimmed = cleaned.trim();
 
   // Stats trigger — handled specially by the caller.
-  if (/^\/pordee-stats(?:\s+--share)?$/.test(trimmed)) {
+  // Matches /pordee-stats, /pordee:pordee-stats, and --share variant.
+  if (/^\/pordee(?::pordee)?-stats(?:\s+--share)?$/.test(trimmed)) {
     return { action: 'stats', share: trimmed.includes('--share') };
   }
 
   // Slash commands — case-insensitive on the command, exact on args.
-  const slashMatch = trimmed.match(/^\/pordee(?:\s+(\w+))?$/i);
+  // Matches /pordee, /pordee:pordee, and variants with args (lite/full/stop).
+  const slashMatch = trimmed.match(/^\/pordee(?::pordee)?(?:\s+(\w+))?$/i);
   if (slashMatch) {
     const arg = (slashMatch[1] || '').toLowerCase();
     if (arg === 'lite') return { enabled: true, level: 'lite' };
     if (arg === 'full') return { enabled: true, level: 'full' };
     if (arg === 'stop') return { enabled: false };
-    if (arg === '') return { enabled: true };  // bare /pordee
+    if (arg === '') return { enabled: true };  // bare /pordee or /pordee:pordee
     // Unknown subcommand — ignore.
     return null;
   }
@@ -83,11 +86,16 @@ process.stdin.on('end', () => {
       const statsScript = path.join(__dirname, 'pordee-stats.js');
       const args = ['--session-file', transcriptPath || ''];
       if (trigger.share) args.push('--share');
-      const statsOut = execFileSync(process.execPath, [statsScript, ...args], {
-        encoding: 'utf8',
-        env: process.env,
-        timeout: 5000,
-      });
+      let statsOut;
+      try {
+        statsOut = execFileSync(process.execPath, [statsScript, ...args], {
+          encoding: 'utf8',
+          env: process.env,
+          timeout: 5000,
+        });
+      } catch (statsErr) {
+        statsOut = statsErr.stdout || statsErr.stderr || 'pordee-stats: failed to load stats';
+      }
       process.stdout.write(JSON.stringify({
         decision: 'block',
         reason: statsOut.trim(),

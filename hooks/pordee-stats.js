@@ -165,19 +165,19 @@ function formatHistory({ sessions, outputTokens, estSavedTokens, estSavedUsd, si
   const sep = '──────────────────────────────────';
   const window = since ? ` (last ${since})` : '';
   if (sessions === 0) {
-    return `\nพอดี Stats — Lifetime${window}\n${sep}\nNo sessions logged yet — run /pordee-stats inside any session to start tracking.\n${sep}\n`;
+    return `\nพอดี Stats — สะสม${window}\n${sep}\nยังไม่มี session — รัน /pordee-stats ใน session ใดก็ได้เพื่อเริ่มเก็บข้อมูล\n${sep}\n`;
   }
-  const usdLine = estSavedUsd > 0 ? `Est. saved (USD):      ~${formatUsd(estSavedUsd)}\n` : '';
-  return `\nพอดี Stats — Lifetime${window}\n${sep}\n` +
+  const usdLine = estSavedUsd > 0 ? `ประหยัด (USD):        ~${formatUsd(estSavedUsd)}\n` : '';
+  return `\nพอดี Stats — สะสม${window}\n${sep}\n` +
     `Sessions:   ${sessions.toLocaleString()}\n${sep}\n` +
     `Output tokens:         ${outputTokens.toLocaleString()}\n` +
-    `Est. tokens saved:     ${estSavedTokens.toLocaleString()}\n` +
+    `ประหยัดโทเค็น:        ${estSavedTokens.toLocaleString()}\n` +
     usdLine + sep + '\n';
 }
 
 function formatShare({ outputTokens, turns, level, model }) {
   if (turns === 0) {
-    return '⚡ pordee armed but no turns yet — pordee';
+    return '⚡ พอดีพร้อม แต่ยังไม่มีเทิร์น — pordee';
   }
   const compression = loadCompression();
   const ratio = compression[level] != null ? compression[level] : null;
@@ -190,9 +190,9 @@ function formatShare({ outputTokens, turns, level, model }) {
       const amt = (estSaved / 1_000_000) * price;
       usd = ` (~${formatUsd(amt)})`;
     }
-    return `⚡ Saved ${estSaved.toLocaleString()} output tokens${usd} across ${turns} turns this session — pordee`;
+    return `⚡ ประหยัด ${estSaved.toLocaleString()} output tokens${usd} จาก ${turns} เทิร์นใน session นี้ — pordee`;
   }
-  return `⚡ ${turns} turns, ${outputTokens.toLocaleString()} output tokens this session — pordee`;
+  return `⚡ ${turns} เทิร์น, ${outputTokens.toLocaleString()} output tokens ใน session นี้ — pordee`;
 }
 
 function formatStats({ outputTokens, cacheReadTokens, turns, level, model, sessionPath }) {
@@ -202,7 +202,7 @@ function formatStats({ outputTokens, cacheReadTokens, turns, level, model, sessi
     : (sessionPath || '');
 
   if (turns === 0) {
-    return `\nพอดี Stats\n${sep}\nNo conversation yet — stats available after first response.\n${sep}\n`;
+    return `\nพอดี Stats\n${sep}\nยังไม่มีบทสนทนา — แสดงสถิติหลังจากได้รับ response แรก\n${sep}\n`;
   }
 
   const compression = loadCompression();
@@ -217,23 +217,23 @@ function formatStats({ outputTokens, cacheReadTokens, turns, level, model, sessi
     let usdLine = '';
     if (price !== null) {
       const usd = (estSaved / 1_000_000) * price;
-      usdLine = `Est. saved (USD):      ~${formatUsd(usd)}\n`;
-      footer = `Savings est. from benchmarks/ (median per-task). Pricing for ${model}. Actual varies by task.`;
+      usdLine = `ประหยัด (USD):        ~${formatUsd(usd)}\n`;
+      footer = `คำนวณประหยัดจาก benchmarks/ (ค่ากลางต่อ task). ราคาสำหรับ ${model}. ตัวเลขจริงขึ้นกับ task.`;
     } else {
-      footer = 'Savings est. from benchmarks/ (median per-task). Actual varies by task.';
+      footer = 'คำนวณประหยัดจาก benchmarks/ (ค่ากลางต่อ task). ตัวเลขจริงขึ้นกับ task.';
     }
-    savings = `Est. without pordee:   ${estNormal.toLocaleString()}\n` +
-              `Est. tokens saved:     ${estSaved.toLocaleString()} (~${Math.round(ratio * 100)}%)\n` +
+    savings = `โทเค็นโดยประมาณ (ไม่ใช้พอดี): ${estNormal.toLocaleString()}\n` +
+              `ประหยัดโทเค็น:        ${estSaved.toLocaleString()} (~${Math.round(ratio * 100)}%)\n` +
               usdLine.replace(/\n$/, '');
   } else if (level) {
-    savings = `No benchmark data for '${level}' level. Run \`node benchmarks/run.js --level ${level}\` first.`;
+    savings = `ไม่มี benchmark สำหรับ level '${level}'. รัน \`node benchmarks/run.js --level ${level}\` ก่อน`;
   } else {
-    savings = 'Pordee not active this session.';
+    savings = 'พอดีไม่ active ใน session นี้';
   }
 
   return `\nพอดี Stats\n${sep}\n` +
     (shortPath ? `Session:  ${shortPath}\n` : '') +
-    `Turns:    ${turns}\n${sep}\n` +
+    `เทิร์น:    ${turns}\n${sep}\n` +
     `Output tokens:         ${outputTokens.toLocaleString()}\n` +
     `Cache-read tokens:     ${cacheReadTokens.toLocaleString()}\n${sep}\n` +
     `${savings}\n` +
