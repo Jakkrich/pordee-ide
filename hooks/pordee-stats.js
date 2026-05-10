@@ -21,7 +21,8 @@ const MODEL_OUTPUT_PRICE_PER_M = [
 ];
 
 function loadCompression() {
-  const compressionPath = path.join(__dirname, '..', 'benchmarks', 'compression.json');
+  const benchmarkDir = process.env.PORDEE_BENCHMARK_DIR || path.join(__dirname, '..', 'benchmarks');
+  const compressionPath = path.join(benchmarkDir, 'compression.json');
   try {
     const data = JSON.parse(fs.readFileSync(compressionPath, 'utf8'));
     return data.compression || {};
