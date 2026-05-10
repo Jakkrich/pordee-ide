@@ -63,6 +63,18 @@ Pattern: `[ของ] [ทำ] [เหตุผล]. [ขั้นต่อ].`
 - lite (~30 tok): "ไปเชียงใหม่ ช่วงพฤศจิกายน-กุมภาพันธ์ดีที่สุด อากาศเย็นสบาย ไม่ร้อน ฝนน้อย ธันวาคมนิยมที่สุดแต่คนเยอะ"
 - full (~12 tok): "พ.ย.-ก.พ. ดีสุด. อากาศเย็น, ฝนน้อย. ธ.ค. คนเยอะ."
 
+## Stats
+
+`/pordee-stats` — แสดงสถิติ token ของ session ปัจจุบัน (output tokens, cache-read tokens, estimated tokens saved, USD saved)
+
+`/pordee-stats --share` — สรุปสถิติ 1 บรรทัด copy-paste ได้
+
+`/pordee-stats --all` — สถิติรวมทุก session (lifetime)
+
+`/pordee-stats --since 7d` — สถิติย้อนหลัง 7 วัน (ใช้ `Nd` หรือ `Nh`)
+
+---
+
 ## Auto-Clarity
 
 Drop pordee briefly (write normal Thai), resume after:
