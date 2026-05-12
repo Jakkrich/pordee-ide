@@ -9,7 +9,7 @@ function makeTempHome() {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'pordee-test-'));
   process.env.PORDEE_HOME = dir;
   // Bust require cache so the helper picks up the new env var.
-  delete require.cache[require.resolve('../hooks/pordee-config.js')];
+  delete require.cache[require.resolve('../lib/pordee-core.js')];
   return dir;
 }
 
@@ -21,7 +21,7 @@ function cleanup(dir) {
 test('getState returns defaults when state file missing', () => {
   const home = makeTempHome();
   try {
-    const { getState, DEFAULT_STATE } = require('../hooks/pordee-config.js');
+    const { getState, DEFAULT_STATE } = require('../lib/pordee-core.js');
     const state = getState();
     assert.equal(state.enabled, DEFAULT_STATE.enabled);
     assert.equal(state.level, DEFAULT_STATE.level);
@@ -34,7 +34,7 @@ test('getState returns defaults when state file missing', () => {
 test('getState returns defaults when JSON malformed', () => {
   const home = makeTempHome();
   try {
-    const { getState, STATE_PATH, DEFAULT_STATE } = require('../hooks/pordee-config.js');
+    const { getState, STATE_PATH, DEFAULT_STATE } = require('../lib/pordee-core.js');
     fs.mkdirSync(path.dirname(STATE_PATH), { recursive: true });
     fs.writeFileSync(STATE_PATH, '{not valid json');
     const state = getState();
@@ -48,7 +48,7 @@ test('getState returns defaults when JSON malformed', () => {
 test('setState creates pordee dir if missing', () => {
   const home = makeTempHome();
   try {
-    const { setState, STATE_PATH } = require('../hooks/pordee-config.js');
+    const { setState, STATE_PATH } = require('../lib/pordee-core.js');
     setState({ enabled: true, level: 'lite' });
     assert.ok(fs.existsSync(STATE_PATH), 'state file should exist');
     const written = JSON.parse(fs.readFileSync(STATE_PATH, 'utf8'));
@@ -64,7 +64,7 @@ test('setState creates pordee dir if missing', () => {
 test('setState writes atomically (no .tmp file remains)', () => {
   const home = makeTempHome();
   try {
-    const { setState, STATE_PATH } = require('../hooks/pordee-config.js');
+    const { setState, STATE_PATH } = require('../lib/pordee-core.js');
     setState({ enabled: true, level: 'full' });
     const tmpPath = STATE_PATH + '.tmp';
     assert.ok(!fs.existsSync(tmpPath), '.tmp file should not exist after write');
@@ -76,7 +76,7 @@ test('setState writes atomically (no .tmp file remains)', () => {
 test('setState merges with existing state (partial update)', () => {
   const home = makeTempHome();
   try {
-    const { getState, setState } = require('../hooks/pordee-config.js');
+    const { getState, setState } = require('../lib/pordee-core.js');
     setState({ enabled: true, level: 'full' });
     setState({ level: 'lite' });
     const state = getState();
@@ -90,7 +90,7 @@ test('setState merges with existing state (partial update)', () => {
 test('STATE_PATH respects PORDEE_HOME env var', () => {
   const home = makeTempHome();
   try {
-    const { STATE_PATH } = require('../hooks/pordee-config.js');
+    const { STATE_PATH } = require('../lib/pordee-core.js');
     assert.ok(STATE_PATH.startsWith(home), `STATE_PATH (${STATE_PATH}) should start with ${home}`);
   } finally {
     cleanup(home);
@@ -100,8 +100,8 @@ test('STATE_PATH respects PORDEE_HOME env var', () => {
 test('STATE_PATH defaults to ~/.pordee/state.json when PORDEE_HOME unset', () => {
   // Don't use makeTempHome — we want PORDEE_HOME UNSET for this test
   delete process.env.PORDEE_HOME;
-  delete require.cache[require.resolve('../hooks/pordee-config.js')];
-  const { STATE_PATH } = require('../hooks/pordee-config.js');
+  delete require.cache[require.resolve('../lib/pordee-core.js')];
+  const { STATE_PATH } = require('../lib/pordee-core.js');
   const expected = path.join(os.homedir(), '.pordee', 'state.json');
   assert.equal(STATE_PATH, expected);
 });
