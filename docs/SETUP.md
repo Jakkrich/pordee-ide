@@ -2,7 +2,21 @@
 
 วิธีเอา pordee ไปใช้กับ Antigravity IDE ใน project อื่น หรือใช้เป็นคำสั่ง global
 
-## 1. ใช้ใน project นี้
+## 1. Clone project
+
+```powershell
+cd D:\
+git clone https://github.com/Jakkrich/pordee-ide
+cd D:\pordee-ide
+```
+
+ตรวจว่ารัน CLI ได้:
+
+```powershell
+node bin\pordee.js status
+```
+
+## 2. ใช้ใน project นี้
 
 เปิด `D:\pordee-ide` ใน Antigravity แล้วใช้ workflow ได้เลย:
 
@@ -22,7 +36,7 @@ node bin\pordee.js status
 node bin\pordee.js stats
 ```
 
-## 2. ติดตั้งเป็น global CLI
+## 3. ติดตั้งเป็น global CLI
 
 จากโฟลเดอร์ `D:\pordee-ide`:
 
@@ -53,7 +67,7 @@ npm unlink -g pordee
 npm install -g D:\pordee-ide
 ```
 
-## 3. ใช้กับ project อื่นใน Antigravity
+## 4. ใช้กับ project อื่นใน Antigravity
 
 สมมติ project เป้าหมายอยู่ที่:
 
@@ -76,7 +90,7 @@ Copy-Item -Force D:\pordee-ide\AGENTS.md D:\my-project\AGENTS.md
 
 แล้วเปิด `D:\my-project` ใน Antigravity ใหม่ หรือ reload workspace เพื่อให้ Antigravity scan `.agent/workflows/`
 
-## 4. ใช้ global CLI กับ project อื่น
+## 5. ใช้ global CLI กับ project อื่น
 
 ถ้าติดตั้ง `pordee` แบบ global แล้ว workflow ใน project อื่นควรเรียก:
 
@@ -94,7 +108,7 @@ node D:\pordee-ide\bin\pordee.js reminder
 node D:\pordee-ide\bin\pordee.js stats
 ```
 
-## 5. State และ logs
+## 6. State และ logs
 
 pordee state เก็บที่:
 
@@ -111,7 +125,7 @@ Antigravity stats อ่านจาก:
 
 ถ้าอ่านจาก `overview.txt` จะแสดง `Output tokens (approx)` เพราะเป็นค่าประมาณจากข้อความ response ไม่ใช่ token usage จริง
 
-## 6. ตรวจสอบ setup
+## 7. ตรวจสอบ setup
 
 ```powershell
 pordee status
@@ -129,7 +143,7 @@ node D:\pordee-ide\bin\pordee.js reminder
 node D:\pordee-ide\bin\pordee.js stats
 ```
 
-## 7. หมายเหตุ
+## 8. หมายเหตุ
 
 - `npm link` เหมาะกับเครื่อง dev เพราะแก้โค้ดใน `D:\pordee-ide` แล้วคำสั่ง global เห็นผลทันที
 - `npm install -g D:\pordee-ide` เหมาะกับการติดตั้งนิ่งกว่า แต่ถ้าแก้ source ต้อง install ใหม่

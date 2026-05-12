@@ -1,12 +1,34 @@
-# pordee
+# pordee-ide
 
 Thai+English terse mode for Antigravity IDE agents.
 
 `pordee` keeps technical English terms exact while shortening Thai responses: less filler, fewer polite particles, less hedging, same technical meaning.
 
+## Credit / Inspiration
+
+`pordee-ide` is an Antigravity IDE adaptation inspired by [kerlos/pordee](https://github.com/kerlos/pordee).
+
+Credit to the original `pordee` project by `kerlos`, which introduced the Thai terse communication mode for coding agents: concise Thai, preserved technical English, and less token waste without losing technical meaning.
+
+This project focuses on making that idea work inside Antigravity through project workflows, `GEMINI.md`, `.agent/workflows/`, and the `bin/pordee.js` CLI.
+
 ## Use In Antigravity
 
-Open this project in Antigravity and use:
+Clone and enter the project:
+
+```powershell
+git clone https://github.com/Jakkrich/pordee-ide
+cd pordee-ide
+```
+
+Optional global CLI setup:
+
+```powershell
+npm link
+pordee status
+```
+
+Open the cloned `pordee-ide` folder in Antigravity and use:
 
 ```text
 /pordee
@@ -55,7 +77,7 @@ pordee stats
 Install a fixed global copy:
 
 ```powershell
-npm install -g D:\pordee-ide
+npm install -g .
 ```
 
 Unlink:
